@@ -1,0 +1,40 @@
+{% load static %}
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>signin Page</title>
+	<link rel="stylesheet" href="{% static 'asset/registerstyles.css' %}">
+</head>
+
+
+<body>
+	<div class="content">
+		<div class="flex-div">
+			<div class="name-content">
+				<h1 class="logo">Socialbook</h1>
+				<p>Connect with friends and the world around you on socialbook.</p>
+			</div>
+			<div class="form">
+				<div class="titlef">Sign in</div>
+				<form action="{% url 'auth:login' %}" method="post">
+					{% csrf_token %}
+					<input type="text" placeholder="Username "  name="uname"/>
+					<input type="password" placeholder="Password" name="pswd">
+					<button class="login" type="submit">Sign In</button>
+					{% for i in messages %}
+					<p style="color:red ;">{{i}}</p>
+					{% endfor %}
+					<hr>
+				</form>
+				<a href="{% url 'auth:register' %}" class="create-account">
+					<button class="create-account">not registered</button>
+				</a>
+
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

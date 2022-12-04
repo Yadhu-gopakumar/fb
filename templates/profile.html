@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<!-- Profile Section  -->
+<div class="profile-container">
+
+  <div class="profile-details" style="justify-content: center;align-items:center;width: 100%;word-wrap: break-word;">
+    <div class="pd-left" style='width:100%;justify-content:space-around;'>
+      <div class="pd-row" style="justify-content:start;align-items:flex-start;width:100%;">
+        <img src="{{ profile_data.profile_pic.url }}" class="pd-image" />
+        <div style="flex-direction:column ;text-align:start;">
+          <h3><b>{{profile_data.username}}</b></h3>
+          <h5><b>{{profile_data.firstname}} {{profile_data.lastname}}</b></h5>
+          <p class="profile-desc text-start">
+            {{profile_data.bio}}
+          </p>
+
+        </div>
+
+
+      </div>
+      <div
+        style="display:flex;flex-direction:row ;text-align: center; justify-content: space-around;width:fit-content;margin: 20px 0 0 5px;">
+        <p style="margin-right: 10px;">following:<b style="color: rgb(43, 1, 43);">{{profile_data.following.count}}</b>
+        </p>
+        <p style="margin-right: 10px;">followers:<b style="color: rgb(43, 1, 43);">{{profile_data.followers.count}}</b>
+        </p>
+        <p>posts:<b style="color: rgb(43, 1, 43);">{{posts.count}}</b> </p>
+      </div>
+    </div>
+    {% if userprofile.username == profile_data.username %}
+    <div class="div"></div>
+    {% else %}
+    <div class="pd-right">
+
+
+      <a href="{% url 'home:follow' profile_data.username %}" style="text-decoration: none;" >
+        <img src="{% static 'images/images/add-friends.png' %} " />
+        <div id="follow">
+          {% if isfollowing %}
+          following
+          {% else %}
+          follow
+          {% endif %}
+        </div>
+      </a>
+
+      <br />
+    </div>
+    {% endif %}
+
+  </div>
+
+  <div class="container">
+    <!-- Left Sidebar  -->
+    <div> </div>
+    <!-- Middle Content  -->
+    <!-- Story Section  -->
+    <div class="main-content">
+
+      <!-- Uploaded Posts Section  -->
+      <!-- Post 1  -->
+      {% if posts %}
+      {% for i in posts reversed %}
+      <div class="post-container">
+        <div class="post-row">
+
+
+          <div class="user-profile">
+            <a href="{% url 'home:profile' i.user.username %}">
+
+              <img src="{{i.post_profile.profile_pic.url}}" style="width:50px ;height:50px;" />
+            </a>
+
+            <div>
+              <p>{{i.user.username}}</p>
+              <span style="font-size: 15px;">{{i.upload_date}}</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+
+        </div>
+        <p class="post-text" style="font-weight: bold;letter-spacing:1px;">
+          {{i.caption}}
+        </p>
+        <hr>
+        <div class="post-row" style="place-items: center;">
+
+          <img src="{{i.postImage.url}}" class="post-img" style="width:70% ;margin-left: 15%;" />
+
+        </div>
+        <div class="post-row">
+          <div class="activity-icons">
+            <a href="{% url 'home:like' i.id %}" style="text-decoration:none ;">
+              {% if userprofile.username in i.likes.all %}
+              <button style="background-color:transparent ;border: 0;outline: 0;" type="submit" class="likebtn">
+                <i class="fa-solid fa-thumbs-up" style="color:blue;font-size: 28px;"></i>
+              </button>
+              {% else %}
+              <button style="background-color:transparent ;border: 0;outline: 0;" type="submit" class="likebtn">
+                <i class="fa-solid fa-thumbs-up" style="font-size: 28px;"></i>
+              </button>
+              {% endif %}
+            </a>
+            {{i.likes.count}}
+            <a href="{% url 'home:comment' id=i.id %}" style="text-decoration:none ;margin-left:20px;">
+              <div class="comment">
+                <i class="fa-regular fa-comment-dots" style="font-size: 28px;color: greenyellow;"></i>
+               view comments
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p>no posts</p>
+
+      {% endif %}
+
+
+
+      <!-- Load More  -->
+
+    </div>
+
+    <!-- Right Sidebar  -->
+    <div></div>
+  </div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container">
+
+  <!-- Left Sidebar  -->
+  <div> </div>
+  <!-- Middle Content  -->
+  <!-- Story Section  -->
+  <div class="main-content">
+
+    <!-- <div class="story-gallery">
+        <div class="story story1">
+          <img src="{% static 'images/images/upload.webp' %}" />
+          <p>Post Story</p>
+        </div>
+        <div class="story story2">
+          <img src="{% static 'images/images/member-1.jpg' %} " />
+          <p>Bill Gates</p>
+        </div>
+        <div class="story story3">
+          <img src="{% static 'images/images/member-2.jpg' %}" />
+          <p>Jeff Bezos</p>
+        </div>
+        <div class="story story4">
+          <img src="{% static 'images/images/member-3.jpg' %}" />
+          <p>Zuckerberg</p>
+        </div>
+        <div class="story story5">
+          <img src="{% static 'images/images/member-4.jpg' %}" />
+          <p>Ratan Tata</p>
+        </div>
+      </div> -->
+
+
+    <!-- Uploaded Posts Section  -->
+    <!-- Post 1  -->
+    {% for i in posts reversed %}
+    <div class="post-container">
+      <div class="post-row">
+
+
+        <div class="user-profile">
+          <a href="{% url 'home:profile' i.user.username %}">
+
+            <img src="{{i.post_profile.profile_pic.url}}" style="height: 50px;width:50px;" />
+          </a>
+
+          <div>
+            <p>{{i.user.username}}</p>
+            <span style="font-size: 15px;">{{i.upload_date}}</span>
+          </div>
+        </div>
+
+      </div>
+      <p class="post-text" style="font-weight: bold;letter-spacing:1px;">
+        {{i.caption}}
+      </p>
+      <hr>
+      <div class="post-row" style="place-items: center;">
+
+        <img src="{{i.postImage.url}}" class="post-img" style="width:70% ;margin-left: 15%;" />
+
+      </div>
+      <div class="post-row">
+        <div class="activity-icons">
+          <a href="{% url 'home:like' i.id %}" style="text-decoration:none ;">
+            {% if userprofile.username in i.likes.all %}
+            <button style="background-color:transparent ;border: 0;outline: 0;" type="submit" class="likebtn">
+              <i class="fa-solid fa-thumbs-up" style="color:blue;font-size: 28px;"></i>
+            </button>
+            {% else %}
+            <button style="background-color:transparent ;border: 0;outline: 0;" type="submit" class="likebtn">
+              <i class="fa-solid fa-thumbs-up" style="font-size: 28px;"></i>
+            </button>
+            {% endif %}
+          </a>
+
+          {{i.likes.count}}
+          <a href="{% url 'home:comment' id=i.id %}" style="text-decoration:none ;margin-left: 20px;">
+            <div class="comment">
+              <i class="fa-regular fa-comment-dots" style="font-size: 28px;color: greenyellow;"></i>
+              view comments
+
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+
+
+    <!-- Right Sidebar  -->
+    <div></div>
+  </div>
+
+  {% endblock %}

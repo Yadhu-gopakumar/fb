@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<style>
+
+
+    .img-sm {
+        width: 46px;
+        height: 46px;
+    }
+
+    .panel {
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.075);
+        border-radius: 0;
+        border: 0;
+        margin-bottom: 15px;
+    }
+
+    .panel .panel-footer,
+    .panel>:last-child {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .panel .panel-heading,
+    .panel>:first-child {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    .panel-body {
+        padding: 25px 20px;
+    }
+
+
+    .media-block .media-left {
+        display: block;
+        float: left
+    }
+
+    .media-block .media-right {
+        float: right
+    }
+
+    .media-block .media-body {
+        display: block;
+        overflow: hidden;
+        width: auto
+    }
+
+    .middle .media-left,
+    .middle .media-right,
+    .middle .media-body {
+        vertical-align: middle
+    }
+
+    .thumbnail {
+        border-radius: 0;
+        border-color: #e9e9e9
+    }
+
+    .tag.tag-sm,
+    .btn-group-sm>.tag {
+        padding: 5px 10px;
+    }
+
+    .tag:not(.label) {
+        background-color: #fff;
+        padding: 6px 12px;
+        border-radius: 2px;
+        border: 1px solid #cdd6e1;
+        font-size: 12px;
+        line-height: 1.42857;
+        vertical-align: middle;
+        -webkit-transition: all .15s;
+        transition: all .15s;
+    }
+
+    .text-muted,
+    a.text-muted:hover,
+    a.text-muted:focus {
+        color: #acacac;
+    }
+
+    .text-sm {
+        font-size: 0.9em;
+    }
+
+    .text-5x,
+    .text-4x,
+    .text-5x,
+    .text-2x,
+    .text-lg,
+    .text-sm,
+    .text-xs {
+        line-height: 1.25;
+    }
+
+    .btn-trans {
+        background-color: transparent;
+        border-color: transparent;
+        color: #929292;
+    }
+
+    .btn-icon {
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+
+    .btn-sm,
+    .btn-group-sm>.btn,
+    .btn-icon.btn-sm {
+        padding: 5px 10px !important;
+    }
+
+    .mar-top {
+        margin-top: 15px;
+    }
+</style>
+
+<div class="container">
+
+    <div class="main-content">
+
+
+        <div class="post-container">
+            <div class="post-row">
+
+
+                <div class="user-profile">
+                    <a href="{% url 'home:profile' posts.user %}">
+
+                        <img src="{{posts.post_profile.profile_pic.url}}" style="width:50px ;height:50px;" />
+                    </a>
+
+                    <div>
+                        <p>{{posts.user}}</p>
+                        <span style="font-size: 15px;">{{posts.upload_date}}</span>
+                    </div>
+                </div>
+
+            </div>
+            <p class="post-text" style="font-weight: bold;letter-spacing:1px;">
+                {{posts.caption}}
+            </p>
+            <hr>
+            <div class="post-row" style="place-items: center;">
+
+                <img src="{{posts.postImage.url}}" class="post-img" style="width:70% ;margin-left: 15%;" />
+
+            </div>
+            <div class="post-row">
+
+
+            </div>
+            <div class="box" style="background-color:white;">
+                <div class="col-md-12 bootstrap snippets">
+                    <div class="panel">
+                        <form class="panel-body" action="{% url 'home:comment' posts.id %}" method="post">
+                            {% csrf_token %}
+                            <textarea class="form-control" rows="1" placeholder="What are you thinking?" name='comment'
+                                style='border-bottom:2px solid blue;'></textarea>
+                            <div class="mar-top clearfix">
+                                <button class="btn btn-sm btn-primary pull-right" type="submit">
+                                    <i class="fa fa-pencil fa-fw"></i> Post Comment</button>
+
+                            </div>
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+
+        {% if comments %}
+        comments({{comments.count}})
+        <hr>
+
+        {% for i in comments reversed %}
+        <div class="post-container">
+            <div class="post-row">
+                <div class="user-profile">
+                    <a href="{% url 'home:profile' i.user.username %}">
+
+                        <img src="{{i.user.profile_pic.url}}" style="width:50px ;height:50px;" />
+                    </a>
+
+                    <div>
+                        <p>{{i.user.username}}</p>
+                        <span style="font-size: 15px;">{{i.date}}</span>
+                    </div>
+
+                </div>
+                {% if i.user.username == userprofile.username %}
+                <a href="{% url 'home:deletecomment' i.id %}">
+
+                   
+                        <i class="fa fa-trash"></i>
+                
+                </a>
+                {% else %}
+                <div class="like" style="right:0;">
+                    <i class="fa fa-thumbs-up"></i>
+                </div>
+                {% endif %}
+
+            </div>
+            <p class="post-text" style="font-weight: bold;letter-spacing:1px;">
+                {{i.comment}}
+            </p>
+        </div>
+
+        {% endfor %}
+
+        {% else %}
+        no comments
+
+        {% endif %}
+    </div>
+
+    {% endblock %}
